@@ -1,0 +1,10 @@
+.m-4{
+    text-align: center;
+}
+form{
+    max-width: 640px;margin: 0 auto;text-align: left;
+}
+.error {
+    font-style: italic;
+    color: red;
+}
