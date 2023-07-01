@@ -1,6 +1,7 @@
 package com.sda.QuickBite.service;
 
 import com.sda.QuickBite.dto.OrderCartEntryDto;
+import com.sda.QuickBite.dto.TotalAmountDto;
 import com.sda.QuickBite.entity.OrderCartEntry;
 import com.sda.QuickBite.mapper.OrderCartEntryMapper;
 import com.sda.QuickBite.repository.OrderCartEntryRepository;
@@ -27,5 +28,23 @@ public class OrderCartEntryService {
             orderCartEntryDtoList.add(orderCartEntryDto);
         }
         return orderCartEntryDtoList;
+    }
+
+    public TotalAmountDto getOrderTotalAmount(String email) {
+        List<OrderCartEntry> orderCartEntryList = orderCartEntryRepository.findByOrderCartUserEmail(email);
+        double totalAmount = calculateTotalAmount(orderCartEntryList);
+        return TotalAmountDto.builder().totalAmount(String.valueOf(totalAmount)).build();
+    }
+
+    public double calculateTotalAmount(List<OrderCartEntry> orderCartEntryList) {
+        double totalAmount = 0;
+        for (OrderCartEntry orderCartEntry : orderCartEntryList){
+            totalAmount = totalAmount + orderCartEntry.getQuantity()*orderCartEntry.getDish().getPrice();
+        }
+        return totalAmount;
+    }
+
+    public List<OrderCartEntry> getOrderCartEntryListByOrderCartId(Long orderCartId) {
+        return orderCartEntryRepository.findAllByOrderCartOrderCartId(orderCartId);
     }
 }

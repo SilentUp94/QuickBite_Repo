@@ -4,6 +4,8 @@ import com.sda.QuickBite.enums.DishCategory;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,6 +35,8 @@ public class Dish {
     @JoinColumn
     private Restaurant restaurant;
 
+    @OneToMany(mappedBy = "dish")
+    private List<OrderCartEntry> orderCartEntryList;
     @Override
     public String toString() {
         return "Dish{" +

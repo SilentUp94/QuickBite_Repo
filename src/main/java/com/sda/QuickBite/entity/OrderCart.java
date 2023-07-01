@@ -15,7 +15,6 @@ public class OrderCart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderCartId;
 
-
     @OneToOne(mappedBy = "orderCart")
     @JoinColumn
     private User user;

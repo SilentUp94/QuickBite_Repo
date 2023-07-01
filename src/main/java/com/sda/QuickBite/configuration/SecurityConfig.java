@@ -40,6 +40,8 @@ public class SecurityConfig {
                     auth.requestMatchers("/restaurant/*/addDish").permitAll();
 
                     auth.requestMatchers("/addToCard/*").permitAll();
+                    auth.requestMatchers("/sendFoodOrder").hasRole("BUYER");
+                    auth.requestMatchers("/orderHistory/foodOrder/*").hasRole("BUYER");
 
 
 

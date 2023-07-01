@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface OrderCartEntryRepository extends CrudRepository<OrderCartEntry, Long> {
     List<OrderCartEntry> findByOrderCartUserEmail(String name);
+
+    List<OrderCartEntry> findAllByOrderCartOrderCartId(Long orderCartId);
 }
