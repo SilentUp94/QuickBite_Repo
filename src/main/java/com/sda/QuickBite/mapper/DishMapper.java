@@ -1,7 +1,9 @@
 package com.sda.QuickBite.mapper;
 
 import com.sda.QuickBite.dto.DishDto;
+import com.sda.QuickBite.dto.DishOrderDetailDto;
 import com.sda.QuickBite.entity.Dish;
+import com.sda.QuickBite.entity.OrderCartEntry;
 import com.sda.QuickBite.entity.Restaurant;
 import com.sda.QuickBite.enums.DishCategory;
 import com.sda.QuickBite.utils.Util;
@@ -34,8 +36,18 @@ public class DishMapper {
                 .description(dish.getDescription())
                 .cookingTime(dish.getCookingTime().toString())
                 .category(dish.getCategory().name())
-                .price(String.format("%.2f", dish.getPrice()) + " RON")
+                .price(String.format("%.2f", dish.getPrice()))
                 .image(BASE64_PREFIX + Base64.encodeBase64String(dish.getImage()))
+                .build();
+    }
+
+    public DishOrderDetailDto map(OrderCartEntry orderCartEntry) {
+
+        Double costPerDish = orderCartEntry.getDish().getPrice() * orderCartEntry.getQuantity();
+        return DishOrderDetailDto.builder()
+                .dishName(orderCartEntry.getDish().getName())
+                .quantity(orderCartEntry.getQuantity().toString())
+                .costPerDish(costPerDish.toString())
                 .build();
     }
 }

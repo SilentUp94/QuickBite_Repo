@@ -20,8 +20,8 @@
                     <div class="navbar-nav">
                         <a href="/yourProfile" th:if="${fullName!=null}" th:text="${fullName}" class="nav-item nav-link"
                            style="font-weight: bold; color: red;">Your Profile</a>
-                        <a href="#" class="nav-item nav-link">View Restaurant</a>
-                        <a href="/addRestaurant" class="nav-item nav-link">Add Restaurant</a>
+                        <a sec:authorize="hasRole('SELLER')" href="#" class="nav-item nav-link">View Restaurant</a>
+                        <a sec:authorize="hasRole('SELLER')" href="/addRestaurant" class="nav-item nav-link">Add Restaurant</a>
                     </div>
 
                     <div class="navbar-nav ms-auto">

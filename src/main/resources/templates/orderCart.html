@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Shopping Cart</title>
+    <title>Order Cart</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="/css/style.css">
@@ -26,6 +26,108 @@
 
 <!--    </div>-->
 <!--</div>-->
+<section class="h-100 gradient-custom">
+    <div class="container py-5">
+        <div class="row d-flex justify-content-center my-4">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header py-3">
+                        <h5 class="mb-0">Order</h5>
+                    </div>
+                    <th:block th:each="orderCartEntryDto : ${orderCartEntryDtoList}">
+                        <div class="card-body">
+
+                            <hr class="my-4"/>
+                            <!-- Single item -->
+                            <div class="row">
+                                <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                                    <div class="bg-image hover-overlay hover-zoom ripple rounded"
+                                         data-mdb-ripple-color="light">
+                                        <img th:src="${orderCartEntryDto.dishDto.image}"
+                                             class="w-100"/>
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                                    <!-- Data -->
+                                    <p><strong th:text="${orderCartEntryDto.dishDto.name}"></strong></p>
+                                    <p th:text="${orderCartEntryDto.dishDto.description}"></p>
+                                    <p th:text="'Coocking Time: ' + ${orderCartEntryDto.dishDto.cookingTime} + ' min'"></p>
+
+                                </div>
+
+                                <div class="col-lg-4 col-md-6 mb-4 v">
+                                    <!-- Quantity -->
+                                    <div class="d-flex mb-4" style="max-width: 300px">
+                                        <button class="btn btn-primary px-3 me-1"
+                                                onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                            -
+                                        </button>
+                                        <div class="form-outline">
+                                            <input th:value="${orderCartEntryDto.quantity}" id="form1" min="0"
+                                                   name="quantity" type="number"
+                                                   class="form-control"/>
+                                            <label class="form-label" for="form1">Quantity</label>
+                                        </div>
+
+                                        <button class="btn btn-primary px-3 py-2 ms-1"
+                                                onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                            +
+                                        </button>
+
+                                    </div>
+
+                                    <!-- Quantity -->
+
+                                    <!-- Price -->
+
+                                    <div class="d-flex " style="max-width: 300px">
+                                        <p class="text-start me-3 ">
+                                            <strong th:text="${orderCartEntryDto.dishDto.price}"></strong>
+                                        </p>
+                                        <form>
+                                            <button  type="button"
+                                                    class="btn btn-primary px-5" style="border-left: 20px">
+                                                Remove
+                                            </button>
+                                        </form>
+                                    </div>
+
+
+                                    <!-- Price -->
+                                </div>
+                            </div>
+                            <!-- Single item -->
+                        </div>
+                    </th:block>
+                </div>
+
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header py-3">
+                        <h5 class="mb-0">Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li
+                                    class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                <div>
+                                    <strong>Total amount</strong>
+                                </div>
+                                <span><strong th:text="${orderTotalAmount.totalAmount} + ' RON'"></strong></span>
+                            </li>
+                        </ul>
+
+                        <a href="/sendFoodOrder"  type="button" class="btn btn-primary btn-lg btn-block">
+                            Send order
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 </body>
 </html>

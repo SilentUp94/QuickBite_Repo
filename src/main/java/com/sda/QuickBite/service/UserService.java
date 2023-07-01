@@ -1,6 +1,7 @@
 package com.sda.QuickBite.service;
 
 import com.sda.QuickBite.dto.UserDto;
+import com.sda.QuickBite.entity.OrderCart;
 import com.sda.QuickBite.entity.User;
 import com.sda.QuickBite.mapper.UserMapper;
 import com.sda.QuickBite.repository.UserRepository;
@@ -51,5 +52,10 @@ public class UserService {
         User user = optionalUser.get();
         UserDto userDto = userMapper.map(user);
         return Optional.of(userDto);
+    }
+
+    public void updateUserOrderCart(User user) {
+        user.setOrderCart(new OrderCart());
+        userRepository.save(user);
     }
 }

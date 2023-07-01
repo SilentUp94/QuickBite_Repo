@@ -2,11 +2,15 @@ package com.sda.QuickBite.service;
 
 import com.sda.QuickBite.dto.DishCategoryDto;
 import com.sda.QuickBite.dto.DishDto;
+import com.sda.QuickBite.dto.DishOrderDetailDto;
 import com.sda.QuickBite.entity.Dish;
+import com.sda.QuickBite.entity.FoodOrder;
+import com.sda.QuickBite.entity.OrderCartEntry;
 import com.sda.QuickBite.entity.Restaurant;
 import com.sda.QuickBite.enums.DishCategory;
 import com.sda.QuickBite.mapper.DishMapper;
 import com.sda.QuickBite.repository.DishRepository;
+import com.sda.QuickBite.repository.OrderCartRepository;
 import com.sda.QuickBite.repository.RestaurantRepository;
 import com.sda.QuickBite.utils.Util;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +40,12 @@ public class DishService {
     private RestaurantRepository restaurantRepository;
     @Autowired
     private Util util;
+    @Autowired
+    private OrderCartRepository orderCartRepository;
+    @Autowired
+    private FoodOrderService foodOrderService;
+    @Autowired
+    private OrderCartEntryService orderCartEntryService;
 
     public void addDish(DishDto dishDto, MultipartFile dishImage, Restaurant restaurant) {
         Dish dish = dishMapper.map(dishDto, dishImage, restaurant);
@@ -76,13 +86,6 @@ public class DishService {
         return dishCategoryDtoList;
     }
 
-    public void uploadImage(MultipartFile dishImage) throws IOException {
-        String folder = "F:\\My-training-java\\FinalProject\\SDA_FinalProject\\QuickBite\\src\\main\\resources\\static\\img\\teste\\";
-        byte[] bytes = util.convertToBytes(dishImage);
-        Path path = Paths.get(folder + dishImage.getOriginalFilename());
-        Files.write(path,bytes);
-    }
-
     public Optional<DishDto> getDishDtoById(String dishId) {
         Optional<Dish> optionalDish = dishRepository.findById(Long.valueOf(dishId));
         if(optionalDish.isEmpty()){
@@ -93,5 +96,21 @@ public class DishService {
         return Optional.of(dishDto);
 
 
+    }
+
+    public List<DishOrderDetailDto> getAllDishDtoByFoodOrderId(String foodOrderId) {
+        Optional<FoodOrder> optionalFoodOrder = foodOrderService.getFoodOrderById(foodOrderId);
+        if(optionalFoodOrder.isEmpty()){
+            return new ArrayList<>();
+        }
+        FoodOrder foodOrder = optionalFoodOrder.get();
+
+        List<OrderCartEntry> orderCartEntryList = orderCartEntryService.getOrderCartEntryListByOrderCartId(foodOrder.getOrderCartId());
+        List<DishOrderDetailDto> dishOrderDetailDtoList = new ArrayList<>();
+        for (OrderCartEntry orderCartEntry : orderCartEntryList){
+            DishOrderDetailDto dishOrderDetailDto = dishMapper.map(orderCartEntry);
+            dishOrderDetailDtoList.add(dishOrderDetailDto);
+        }
+        return dishOrderDetailDtoList;
     }
 }

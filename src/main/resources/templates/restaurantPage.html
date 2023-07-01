@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -17,19 +17,17 @@
 
         <div class="card-img-overlay p-5 text-white ">
             <img class="card-header" th:src="${restaurantDto.logo}" style=" height: 150px" alt="Product image">
-            <div style="display: flex; flex-direction: column; align-items: flex-start; font-size: 50px; padding-top: 100px">
-                <div class="card-body" th:text="'Nume Restaurant: ' + ${restaurantDto.name}"></div>
-                <div class="card-body" th:text="'Descriere: ' + ${restaurantDto.description}"></div>
-                <div class="card-body" th:text="'Specific: ' + ${restaurantDto.restaurantSpecific}"></div>
-                <div class="card-body" th:text="'Adresa: ' + ${restaurantDto.address}"></div>
-                <div class="card-body" th:text="'Telefon: ' + ${restaurantDto.phoneNo}"></div>
-            </div>
+                <h1 class="card-header-title" th:text="${restaurantDto.name}"></h1>
+                <h1 class="card-header" th:text="${restaurantDto.restaurantSpecific}"></h1>
+                <h3 class="card-body" th:text="${restaurantDto.description}"></h3>
+                <h2 class="card-footer" th:text="${restaurantDto.address}"></h2>
+                <h2 class="card-footer" th:text="${restaurantDto.phoneNo}"></h2>
         </div>
 
     </div>
 </div>
 
-<nav class="navbar navbar-expand-sm bg-light justify-content-center">
+<nav sec:authorize="hasRole('SELLER')" class="navbar navbar-expand-sm bg-light justify-content-center">
     <ul class="navbar-nav">
         <li class="nav-item px-3 ">
             <a class="btn btn-outline-dark " th:href="@{/restaurant/{x}/addDish (x=${restaurantId})}">Add dish</a>
@@ -40,8 +38,8 @@
     </ul>
 </nav>
 
-
-<div class="container my-3 2-70" style="text-align: left;">
+<!--Buyer-->
+<div sec:authorize="hasRole('BUYER')" class="container my-3 2-70" style="text-align: left;">
     <th:block th:each="dishCategoryDto : ${dishCategoryDtoList}">
         <div class="container my-4 ">
             <h1 class="ms-5 " th:text="${dishCategoryDto.categoryName}"></h1>
@@ -51,7 +49,27 @@
                         <div class="card bg-light text-dark m-3" style="width:300px">
                             <h4 class="card-header" th:text="${dishDto.name}"></h4>
                             <img th:src="${dishDto.image}" alt="Imagine product">
-                            <div class="card-footer" th:text="${dishDto.price}"></div>
+                            <div class="card-footer" th:text="${dishDto.price} + ' RON'"></div>
+                        </div>
+                    </a>
+                </th:block>
+            </div>
+        </div>
+    </th:block>
+</div>
+
+<!--Seller-->
+<div sec:authorize="hasRole('SELLER')" class="container my-3 2-70" style="text-align: left;">
+    <th:block th:each="dishCategoryDto : ${dishCategoryDtoList}">
+        <div class="container my-4 ">
+            <h1 class="ms-5 " th:text="${dishCategoryDto.categoryName}"></h1>
+            <div class="container d-flex flex-wrap justify-content-left ">
+                <th:block th:each="dishDto : ${dishCategoryDto.dishDtoList}">
+                    <a th:href="@{/dish/{x}(x=${dishDto.id})}" class="nav-link m-0 p-0 btn-outline-light">
+                        <div class="card bg-light text-dark m-3" style="width:300px">
+                            <h4 class="card-header" th:text="${dishDto.name}"></h4>
+                            <img th:src="${dishDto.image}" alt="Imagine product">
+                            <div class="card-footer" th:text="${dishDto.price} + ' RON'"></div>
                         </div>
                     </a>
                 </th:block>
